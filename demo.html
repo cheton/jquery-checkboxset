@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Checkbox Set</title>
+<meta http-equiv="X-UA-Compatible" content="IE=8"/>
+<meta charset="utf-8" />
+</head>
+<body>
+<h1>Checkbox Set</h1>
+<ul id="checkboxset">
+    <li><input type="checkbox" id="chk_items" name="chk_items"><label for="chk_items">Check all items</label></li>
+    <hr/>
+	<li><input type="checkbox" id="chk_item_1" name="chk_item_1"><label for="chk_item_1">Item 1</label>
+        <ul style="padding-left: 20px;">
+            <li><input type="checkbox" id="chk_item_1_1" name="chk_item_1_1"><label for="chk_item_1_1">Item 1_1</label></li>
+            <li><input type="checkbox" id="chk_item_1_2" name="chk_item_1_2"><label for="chk_item_1_2">Item 1_2</label></li>
+	        <ul style="padding-left: 20px;">
+                <li><input type="checkbox" id="chk_item_1_2_1" name="chk_item_1_2_1"><label for="chk_item_1_2_1">Item 1_2_1</label></li>
+                <li><input type="checkbox" id="chk_item_1_2_2" name="chk_item_1_2_2"><label for="chk_item_1_2_2">Item 1_2_2</label></li>
+            </ul>
+        </ul>
+    </li>
+    <li><input type="checkbox" id="chk_item_2" name="chk_item_2"><label for="chk_item_2">Item 2</label></li>
+	<li><input type="checkbox" id="chk_item_3" name="chk_item_3"><label for="chk_item_3">Item 3</label></li>
+</ul>
+    
+<script src="jquery-1.4.4.min.js"></script>
+<script src="jquery.checkboxset-1.0.js"></script>
+
+<script>
+var checkboxset = $("#checkboxset").checkboxset({
+    tristate : true,
+    data : {
+        "chk_items" : {
+            "chk_item_1" : {
+                "chk_item_1_1" : { checked : true },
+                "chk_item_1_2" : { 
+                    "chk_item_1_2_1" : { checked : true },
+                    "chk_item_1_2_2" : { checked : false }
+                }
+            },
+            "chk_item_2" : { checked : false },
+            "chk_item_3" : { checked : true }
+        }
+    },
+    change : function(name) {
+        if ($.browser.mozilla) {
+            console.log(name + " checked");
+        }
+    }
+});
+
+if ($.browser.mozilla) {
+    console.log(checkboxset.checked("chk_item_1_1"));
+    console.log(checkboxset.checked("chk_item_1_2"));
+    console.log(checkboxset.indeterminate("chk_item_1_1"));
+    console.log(checkboxset.indeterminate("chk_item_1_2"));
+}
+
+</script>
+</body>
+</html>
