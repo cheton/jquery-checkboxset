@@ -6,8 +6,10 @@
 <meta charset="utf-8" />
 </head>
 <body>
-<h1>Checkbox Set</h1>
-<ul id="checkboxset">
+
+<h1>Tree</h1>
+<div id="checkboxset1">
+<ul>
     <li><input type="checkbox" id="chk_items" name="chk_items"><label for="chk_items">Check all items</label></li>
     <hr/>
 	<li><input type="checkbox" id="chk_item_1" name="chk_item_1"><label for="chk_item_1">Item 1</label>
@@ -23,12 +25,58 @@
     <li><input type="checkbox" id="chk_item_2" name="chk_item_2"><label for="chk_item_2">Item 2</label></li>
 	<li><input type="checkbox" id="chk_item_3" name="chk_item_3"><label for="chk_item_3">Item 3</label></li>
 </ul>
+</div>
     
+<h1>Table</h1>
+<div id="checkboxset2">
+<table border="0" cellpadding="0" cellspacing="0">
+<thead>
+    <th style="text-align: left;"><input type="checkbox" name="chk_items"></th>
+    <th style="text-align: left;">Fruit</th>
+</thead>
+<tbody>
+    <tr>
+        <td colspan=2"><hr /></td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item"></td>
+        <td>Banana</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item" checked="checked"></td>
+        <td>Papaya</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item" checked="checked"></td>
+        <td>Guava</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item" checked="checked"></td>
+        <td>Apple</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item" checked="checked"></td>
+        <td>Orange</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item" checked="checked"></td>
+        <td>Grape</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="chk_item" checked="checked"></td>
+        <td>Pineapple</td>
+    </tr>
+</tbody>
+</table>
+</div>
+
 <script src="jquery-1.4.4.min.js"></script>
 <script src="jquery.checkboxset-1.0.js"></script>
-
 <script>
-var checkboxset = $("#checkboxset").checkboxset({
+/**
+ * Example 1
+ */
+var checkboxset1 = $("#checkboxset1").checkboxset({
     tristate : true,
     data : {
         "chk_items" : {
@@ -51,11 +99,23 @@ var checkboxset = $("#checkboxset").checkboxset({
 });
 
 if ($.browser.mozilla) {
-    console.log(checkboxset.checked("chk_item_1_1"));
-    console.log(checkboxset.checked("chk_item_1_2"));
-    console.log(checkboxset.indeterminate("chk_item_1_1"));
-    console.log(checkboxset.indeterminate("chk_item_1_2"));
+    console.log(checkboxset1.checked("chk_item_1_1"));
+    console.log(checkboxset1.checked("chk_item_1_2"));
+    console.log(checkboxset1.indeterminate("chk_item_1_1"));
+    console.log(checkboxset1.indeterminate("chk_item_1_2"));
 }
+
+/**
+ * Example 2
+ */
+var checkboxset2 = $("#checkboxset2").checkboxset({
+    tristate : true,
+    data : {
+        "chk_items" : {
+            "chk_item" : { }
+        }
+    }
+});
 
 </script>
 </body>

@@ -55,27 +55,31 @@
      */
 
     __init__ = function(config, obj, prefix) {
-       for (var key in obj) {
-           var checked = false;
-           var val = obj[key];
-           if (isset(val.checked)) {
-               config.selector.find("input[name='" + key + "']").attr("checked", val.checked);
-               delete val.checked;
-           }
-           if ( ! empty(val)) {
-               __init__(config, val, empty(prefix) ? key : prefix + "." + key);
-           }
-           config.selector.find("input[name='" + key + "']").bind(
-               "click", { prefix : prefix, name : key, descendants : val },
-               function(e) {
-                   var checked = $(this).attr("checked");
-                   traverse_descendants(config, e.data.descendants, checked);
-                   traverse_ancestors(config, e.data.prefix);
-                   config.change(e.data.name); // change callback
-               }
-           );
-       }
-       traverse_ancestors(config, prefix);
+        for (var key in obj) {
+            var checked = false;
+            var val = obj[key];
+            if (isset(val.checked)) {
+                config.selector.find("input[name='" + key + "']").each(function() {
+                    $(this).attr("checked", val.checked);
+                });
+                delete val.checked;
+            }
+            if ( ! empty(val)) {
+                __init__(config, val, empty(prefix) ? key : prefix + "." + key);
+            }
+            config.selector.find("input[name='" + key + "']").each(function() {
+                $(this).bind(
+                    "click", { prefix : prefix, name : key, descendants : val },
+                    function(e) {
+                        var checked = $(this).attr("checked");
+                        traverse_descendants(config, e.data.descendants, checked);
+                        traverse_ancestors(config, e.data.prefix);
+                        config.change(e.data.name); // change callback
+                    }
+                );
+            });
+        }
+        traverse_ancestors(config, prefix);
     }
 
     traverse_descendants = function(config, objs, checked) {
@@ -84,9 +88,13 @@
             if ( ! empty(val)) {
                 traverse_descendants(config, val, checked);
             }
-            config.selector.find("input[name='" + key + "']").attr("checked", checked);
+            config.selector.find("input[name='" + key + "']").each(function() {
+                $(this).attr("checked", checked);
+            });
             if (config.tristate) {
-                config.selector.find("input[name='" + key + "']").attr("indeterminate", false);
+                config.selector.find("input[name='" + key + "']").each(function() {
+                    $(this).attr("indeterminate", false);
+                });
             }
         }
     }
@@ -103,18 +111,24 @@
         }
         var count = 0, checked = 0, indeterminate = 0;
         for (var name in obj) {
-            if (config.selector.find("input[name='" + name + "']").attr("checked")) {
-                ++checked;
-            }
-            if (config.selector.find("input[name='" + name + "']").attr("indeterminate")) {
-                ++indeterminate;
-            }
-            ++count;
+            config.selector.find("input[name='" + name + "']").each(function() {
+                if ($(this).attr("checked")) {
+                    ++checked;
+                }
+                if ($(this).attr("indeterminate")) {
+                    ++indeterminate;
+                }
+                ++count;
+            });
         }
         var name = arr.pop();
-        config.selector.find("input[name='" + name + "']").attr("checked", checked > 0);
+        config.selector.find("input[name='" + name + "']").each(function() {
+            $(this).attr("checked", checked > 0);
+        });
         if (config.tristate) {
-            config.selector.find("input[name='" + name + "']").attr("indeterminate", (checked > 0 && count != checked) || (indeterminate > 0));
+            config.selector.find("input[name='" + name + "']").each(function() {
+                $(this).attr("indeterminate", (checked > 0 && count != checked) || (indeterminate > 0));
+            });
         }
         traverse_ancestors(config, arr.join("."));
     }
@@ -124,7 +138,7 @@
     }
 
     function empty(mixed_var) {
-        if (mixed_var === "" || mixed_var === 0 || mixed_var === "0" || mixed_var === null || mixed_var === false ||  typeof mixed_var === 'undefined') {
+        if (mixed_var === "" || mixed_var === 0 || mixed_var === "0" || mixed_var === null || mixed_var === false || typeof mixed_var === 'undefined') {
             return true;
         }
 
