@@ -67,14 +67,14 @@
             if ( ! empty(val)) {
                 __init__(config, val, empty(prefix) ? key : prefix + "." + key);
             }
-            config.selector.find("input[name='" + key + "']").each(function() {
+            config.selector.find("input[name='" + key + "']").each(function(index) {
                 $(this).bind(
                     "click", { prefix : prefix, name : key, descendants : val },
                     function(e) {
                         var checked = $(this).attr("checked");
                         traverse_descendants(config, e.data.descendants, checked);
                         traverse_ancestors(config, e.data.prefix);
-                        config.change(e.data.name); // change callback
+                        config.change(e.data.name, index); // change callback
                     }
                 );
             });

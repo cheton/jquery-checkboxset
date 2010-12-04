@@ -91,9 +91,9 @@ var checkboxset1 = $("#checkboxset1").checkboxset({
             "chk_item_3" : { checked : true }
         }
     },
-    change : function(name) {
+    change : function(name, index) {
         if ($.browser.mozilla) {
-            console.log(name + " checked");
+            console.log(name + "[" + index + "] checked");
         }
     }
 });
@@ -113,6 +113,11 @@ var checkboxset2 = $("#checkboxset2").checkboxset({
     data : {
         "chk_items" : {
             "chk_item" : { }
+        }
+    },
+    change : function(name, index) {
+        if ($.browser.mozilla) {
+            console.log(name + "[" + index + "] checked");
         }
     }
 });
