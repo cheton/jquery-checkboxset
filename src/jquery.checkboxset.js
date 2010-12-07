@@ -1,11 +1,10 @@
 /**
- * jQuery CheckboxSet plugin
+ * jQuery Checkbox Set Plugin (https://github.com/cheton/jquery-checkboxset)
+ *
+ * Copyright (c) Cheton Wu (https://github.com/cheton)
  *
  * This document is licensed as free software under the terms of the
  * MIT License: http://www.opensource.org/licenses/mit-license.php
- *
- * @author      Cheton Wu
- * @version     $Id: jquery.checkboxset.js 2010-12-03 cheton@gmail.com $
  */
 
 (function($) {
@@ -67,14 +66,14 @@
             if ( ! empty(val)) {
                 __init__(config, val, empty(prefix) ? key : prefix + "." + key);
             }
-            config.selector.find("input[name='" + key + "']").each(function(index) {
+            config.selector.find("input[name='" + key + "']").each(function() {
                 $(this).bind(
                     "click", { prefix : prefix, name : key, descendants : val },
                     function(e) {
                         var checked = $(this).attr("checked");
                         traverse_descendants(config, e.data.descendants, checked);
                         traverse_ancestors(config, e.data.prefix);
-                        config.change(e.data.name, index); // change callback
+                        config.change(e.data.name, i); // change callback
                     }
                 );
             });
