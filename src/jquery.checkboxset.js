@@ -10,20 +10,17 @@
 (function($) {
 
     $.fn.checkboxset = function(options) {
-        var defaults = {
+        var settings = $.extend({
             tristate : true,
             data : {},
             change : function(name) { }
-        };
-        options.tristate = isset(options.tristate) ? options.tristate : defaults.tristate;
-        options.data = options.data || defaults.data;
-        options.change = options.change || defaults.change;
+        }, options);
 
         var config = {
             selector : $(this),
-            tristate : options.tristate,
-            data : options.data,
-            change : options.change
+            tristate : settings.tristate,
+            data : settings.data,
+            change : settings.change
         };
 
         /**
