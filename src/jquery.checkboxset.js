@@ -10,18 +10,13 @@
 (function($) {
 
     $.fn.checkboxset = function(options) {
-        var settings = $.extend({
+        var defaults = {
             tristate : true,
             data : {},
             change : function(name) { }
-        }, options);
-
-        var config = {
-            selector : $(this),
-            tristate : settings.tristate,
-            data : settings.data,
-            change : settings.change
         };
+
+        var config = $.extend({}, defaults, options, { $_selector : $(this) });
 
         /**
          * Public Methods
@@ -31,14 +26,14 @@
          * Returns the checked status with the given name
          */
         this.checked = function(name) {
-            return config.selector.find("input[name='" + name + "']").attr("checked");
+            return config.$_selector.find("input[name='" + name + "']").attr("checked");
         }
 
         /**
          * Returns the indeterminate status with the given name
          */
         this.indeterminate = function(name) {
-            return config.selector.find("input[name='" + name + "']").attr("indeterminate");
+            return config.$_selector.find("input[name='" + name + "']").attr("indeterminate");
         }
 
         __init__(config, config.data, "");
@@ -55,7 +50,7 @@
             var checked = false;
             var val = obj[key];
             if (isset(val.checked)) {
-                config.selector.find("input[name='" + key + "']").each(function() {
+                config.$_selector.find("input[name='" + key + "']").each(function() {
                     $(this).attr("checked", val.checked);
                 });
                 delete val.checked;
@@ -63,14 +58,14 @@
             if ( ! empty(val)) {
                 __init__(config, val, empty(prefix) ? key : prefix + "." + key);
             }
-            config.selector.find("input[name='" + key + "']").each(function() {
+            config.$_selector.find("input[name='" + key + "']").each(function(index) {
                 $(this).bind(
                     "click", { prefix : prefix, name : key, descendants : val },
                     function(e) {
                         var checked = $(this).attr("checked");
                         traverse_descendants(config, e.data.descendants, checked);
                         traverse_ancestors(config, e.data.prefix);
-                        config.change(e.data.name, i); // change callback
+                        config.change(e.data.name, index); // change callback
                     }
                 );
             });
@@ -84,11 +79,11 @@
             if ( ! empty(val)) {
                 traverse_descendants(config, val, checked);
             }
-            config.selector.find("input[name='" + key + "']").each(function() {
+            config.$_selector.find("input[name='" + key + "']").each(function() {
                 $(this).attr("checked", checked);
             });
             if (config.tristate) {
-                config.selector.find("input[name='" + key + "']").each(function() {
+                config.$_selector.find("input[name='" + key + "']").each(function() {
                     $(this).attr("indeterminate", false);
                 });
             }
@@ -107,7 +102,7 @@
         }
         var count = 0, checked = 0, indeterminate = 0;
         for (var name in obj) {
-            config.selector.find("input[name='" + name + "']").each(function() {
+            config.$_selector.find("input[name='" + name + "']").each(function() {
                 if ($(this).attr("checked")) {
                     ++checked;
                 }
@@ -118,11 +113,11 @@
             });
         }
         var name = arr.pop();
-        config.selector.find("input[name='" + name + "']").each(function() {
+        config.$_selector.find("input[name='" + name + "']").each(function() {
             $(this).attr("checked", checked > 0);
         });
         if (config.tristate) {
-            config.selector.find("input[name='" + name + "']").each(function() {
+            config.$_selector.find("input[name='" + name + "']").each(function() {
                 $(this).attr("indeterminate", (checked > 0 && count != checked) || (indeterminate > 0));
             });
         }
